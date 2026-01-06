@@ -2,13 +2,56 @@ import flet as ft
 import random
 import math
 
-class Student:
-    def __init__(self, first_name: str, last_name: str):
-        self.first_name=first_name
-        self.last_name=last_name
-        self.matiere={}
-        pass
+class AntColony:
+    def __init__(self, distances, n_ants, n_best, n_iterations, decay, alpha=1, beta=2):
+        self.distances = distances
+        self.n_ants = n_ants
+        self.n_best = n_best
+        self.n_iterations = n_iterations
+        self.decay = decay
+        self.alpha = alpha
+        self.beta = beta
+        self.meilleur_chemin= None
+        self.meilleure_distance=math.inf
 
+        n = len(distances)
+        self.all_indices= range(n)
+        pheromones = [[1.0 for j in range(n)] for i in range(n)]
+
+    def calculer_distance_chemin(self, chemin):
+        L=len(chemin)
+        total=0
+        for i in range(L-1):
+            total += self.distances[chemin[i]][chemin[i+1]]
+        return total
+    
+
+    def generer_tous_chemins(self):
+        chemin=[random.randint(0, len(distances)-1)]
+        while len(chemin)<len(self.distances):
+            prochaines_probas = self.calculer_probabilites_mouvement(chemin)
+            prochaine_ville = self.choisir_prochaine_ville(prochaines_probas)
+            chemin.append(prochaine_ville)
+        
+        return (chemin, self.calculer_distance_chemin(chemin))
+
+    def calculer_probabilites_mouvement(self, chemin):
+        derniere=chemin[-1]
+        proba=[]
+        for ville in self.all_indices:
+            if ville in chemin:
+                proba.append(0)
+            else:
+                pheromone= self.pheromones[derniere][ville] ** self.alpha
+                heuristique = (1.0 / self.distances[derniere][ville]) ** self.beta
+                proba.append(pheromone * heuristique)
+        
+        total = sum(proba)
+        if total > 0:
+            return [p / total for p in proba]
+        else:
+            return [0] * len(proba)
+    def choisir_ville_suivante(self, probabilites):
 
 def main(page: ft.Page):
     page.title="Algorithme de colonies de fourmis"
