@@ -108,7 +108,7 @@ class AntColony:
             chemin_courant, distance_courante = self.executer_iteration()
             
             # Appeler le callback de mise à jour
-            callback_maj(iteration, chemin_courant, self.pheromones)
+            callback_maj(iteration,(chemin_courant, distance_courante),self.pheromones)
             
             # Petite pause pour permettre la mise à jour de l'interface
             time.sleep(0.1)

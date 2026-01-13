@@ -160,20 +160,23 @@ def main(page: ft.Page):
 
         iteration = iter_num
         pheromones = current_pheromones
-        if (
-            isinstance(current_best, tuple)
-            and isinstance(current_best[0], list)
-        ):
+
+        # Normalisation propre du meilleur chemin
+        if isinstance(current_best, tuple) and isinstance(current_best[0], list):
             best_path = current_best[0]
+            path_text.value = (
+                f"Meilleur chemin : {best_path} "
+                f"(L={current_best[1]:.2f})"
+            )
         else:
-            best_path = []
-            path_text.value = f"Meilleur chemin : {best_path} (L={current_best[1]:.2f})"
+            # On NE TOUCHE PAS au best_path existant
+            pass
 
         iteration_text.value = f"Itération : {iteration}"
         avg = sum(sum(row) for row in pheromones) / (len(nodes) ** 2)
         pheromone_text.value = f"Phéromones moyennes : {avg:.4f}"
-        dessiner_graphe()
 
+        dessiner_graphe()
     # =====================
     # Boutons contrôle
     # =====================
