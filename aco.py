@@ -113,3 +113,4 @@ class AntColony:
             # Petite pause pour permettre la mise à jour de l'interface
             time.sleep(0.1)
 
+#commentaire
